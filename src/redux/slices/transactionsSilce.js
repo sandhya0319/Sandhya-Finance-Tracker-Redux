@@ -7,12 +7,21 @@ import { DefaultJSON } from '../../utils/constants';
   initialState:{value:DefaultJSON},
   reducers:{
     addTransaction:(state,action)=>{
-      const settransactions=[action.payload,...state.value];
+      const settransactions=[...state.value,action.payload];
       state.value=settransactions;
       
     },
+    editTransaction:(state,action)=>{
+      const  settransactions= state.value.map((element) => element.id === action.payload.id ? action.payload.val : element);
+      state.value = settransactions;
+      
+    },
+    deleteTransaction:(state,action)=>{
+      const settransactions = state.value.filter((element) => element.id !== action.payload);
+      state.value = settransactions;
+    }
 
   }
  })
-export const {addTransaction}=transactionsSlice.actions
+export const {addTransaction,editTransaction,deleteTransaction}=transactionsSlice.actions
 export default transactionsSlice.reducer;

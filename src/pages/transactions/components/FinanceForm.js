@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, errors } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -7,8 +7,8 @@ import { useParams } from "react-router-dom";
 import { monthYearOptions, transactionTypeOptions, toaccountOptions, fromaccountOptions } from '../../../utils/constants';
 // import { TableContext } from '../../contexts/Transactioncontext';
 //import { UseTransactionContext } from '../../contexts/Transactioncontext';
-import { useSelector,useDispatch } from 'react-redux';
-import { addTransaction } from '../../../redux/slices/transactionsSilce';
+import { useSelector, useDispatch } from 'react-redux';
+import { addTransaction,editTransaction,deleteTransaction } from '../../../redux/slices/transactionsSilce';
 
 
 const schema = yup.object().shape({
@@ -40,7 +40,7 @@ const schema = yup.object().shape({
             if (value && value[0] && /^image\/(jpe?g|png)/.test(value[0].type)) {
                 return true;
             }
-           
+
             if (typeof value === 'string' && value.startsWith('data:image')) {
                 return true;
             }
@@ -61,19 +61,14 @@ const schema = yup.object().shape({
 
 const FinanceForm = () => {
 
-    const transactionredux = useSelector((state)=>state.transaction.value);
+    const transactionredux = useSelector((state) => state.transaction.value);
 
-    console.log("TRAAA",transactionredux);
+    console.log("TRAAA", transactionredux);
     const dispatch = useDispatch();
-
-    //console.log(transactionredux,"rrrrrrr");
-
-    //const { transactionvalue, setTransactionValue } = transactionredux;
 
     const { id } = useParams();
 
     const navigate = useNavigate();
-
 
     const [matchedData, setmatchedData] = useState({
         Transactiondate: "",
@@ -104,7 +99,7 @@ const FinanceForm = () => {
                     type: "manual",
                     message: "",
                 });
-                
+
             };
             reader.readAsDataURL(file);
         } else {
@@ -122,7 +117,7 @@ const FinanceForm = () => {
     };
 
     const generateId = () => {
-        const existingData = dispatch(addTransaction);
+        const existingData = transactionredux;
         return existingData.length + 1;
 
     }
@@ -139,11 +134,8 @@ const FinanceForm = () => {
             data.image = imgPath;
         }
 
-       
+        const val = { ...data };
 
-         const val = { ...data };
-
-          console.log("VALLL",val);
         const newval = {
             ...matchedData, Transactiondate: val.Transactiondate,
             transactionType: val.transactionType,
@@ -154,42 +146,37 @@ const FinanceForm = () => {
             image: val.image,
             notes: val.notes
         }
-        //console.log(val.image,"imgggggg");
-        const existingData = dispatch(addTransaction(val));
-        setmatchedData(existingData)
-        console.log(existingData,"exxxx")
         if (id) {
-            existingData[id - 1] = newval;
-            //setTransactionValue(existingData);
-
-            dispatch(addTransaction(existingData))
+            const existingData = dispatch(editTransaction({ id: newval.id, val }));
+            
+            // existingData[id - 1] = newval;
+            // const existingData = {...val};
+            // dispatch(editTransaction({ id: newval.id, existingData }))
+            // existingData[id - 1] = newval;
+            //dispatch(editTransaction(existingData))
             setmatchedData(existingData)
-            console.log("sandhyaa",existingData)
+            console.log("sandhyaa", existingData)
             alert("Records updated successfully!!!");
             navigate("/viewdata");
         }
         else {
             newval.id = generateId();
-            const existingData = dispatch(addTransaction);
-            
-            const newData = [...existingData, newval];
-            //setTransactionValue(newData);
-            dispatch(addTransaction(newData))
-            setmatchedData(newData)
+            const existingData = dispatch(addTransaction(newval));
+            setmatchedData(existingData);
             alert("Records inserted successfully!!!");
             navigate("/viewdata");
         }
     };
 
-    // useEffect(() => {
-    //     if (!id) return
-    //     let matched = transactionvalue.find(obj => obj.id == id);
-    //     setmatchedData(matched);
-    //     Object.entries(matchedData).forEach(([key, value]) => {
-    //         setValue(key, value)
-    //     });
-    //     setImagePreview(matchedData.image);
-    // }, [matchedData, setValue]);
+    useEffect(() => {
+        if (!id) return
+        let matched = transactionredux.find(obj => obj.id == id);
+        setmatchedData(matched);
+        Object.entries(matchedData).forEach(([key, value]) => {
+            setValue(key, value)
+        });
+        setImagePreview(matchedData.image);
+    }, [matchedData, setValue]);
 
     return (
         <div>
@@ -322,7 +309,7 @@ const FinanceForm = () => {
                         <div class="col-sm-10">
                             <input type="file" class="form-control" name="image" {...register("image")} onChange={handleImageChange} />
                             {imagePreview && <div onClick={removefile}>remove</div>}
-                            {imagePreview && <img src={imagePreview} />}
+                            {imagePreview && <img src={imagePreview} width="200px" />}
                             {errors.image && <p>{errors.image.message}</p>}
                         </div>
                     </div>

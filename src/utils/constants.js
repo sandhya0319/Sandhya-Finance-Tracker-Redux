@@ -114,3 +114,7 @@ export const DefaultJSON = [
     id: 6,
   },
 ];
+export const DefaultUsers = [
+  {"username":"sandhya","email":"kanaujiasandhya03@gmail.com","password":"1234"},
+    {"username":"shreya","email":"shreya@gmail.com","password":"1234"}
+  ];

@@ -5,7 +5,7 @@ const Table = ({ data, handleDelete }) => {
 
     const [currentPageData, setCurrentPageData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(2);
+    const [itemsPerPage, setItemsPerPage] = useState(5);
     const [sortColumn, setSortColumn] = useState(null);
     const [sortDirection, setSortDirection] = useState("asc");
 
