@@ -12,7 +12,10 @@ import { DefaultJSON } from '../../utils/constants';
       
     },
     editTransaction:(state,action)=>{
+      console.log("state",state);
+      //console.log("action",action);
       const  settransactions= state.value.map((element) => element.id === action.payload.id ? action.payload.val : element);
+     // console.log("dee",settransactions);
       state.value = settransactions;
       
     },

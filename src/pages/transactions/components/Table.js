@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Table = ({ data, handleDelete }) => {
-
     const [currentPageData, setCurrentPageData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);
@@ -113,7 +112,8 @@ const Table = ({ data, handleDelete }) => {
                                 <td>{row['transactionType']}</td>
                                 <td>{row['fromAccount']}</td>
                                 <td>{row['toAccount']}</td>
-                                <td>{row['amount']}</td>
+                                {/* <td>{row['amount']}</td> */}
+                                <td><span style={{fontfamily:"Arial"}}>&#8377; {Number(row['amount']).toLocaleString('en-IN')}</span></td>
                                 <td>{row['notes']}</td>
                                 <td><img src={row['image']} alt='receipt' /></td>
                                 <td>

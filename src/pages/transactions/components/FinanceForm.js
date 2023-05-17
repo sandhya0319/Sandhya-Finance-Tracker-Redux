@@ -5,8 +5,6 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useParams } from "react-router-dom";
 import { monthYearOptions, transactionTypeOptions, toaccountOptions, fromaccountOptions } from '../../../utils/constants';
-// import { TableContext } from '../../contexts/Transactioncontext';
-//import { UseTransactionContext } from '../../contexts/Transactioncontext';
 import { useSelector, useDispatch } from 'react-redux';
 import { addTransaction,editTransaction,deleteTransaction } from '../../../redux/slices/transactionsSilce';
 
@@ -70,7 +68,7 @@ const FinanceForm = () => {
 
     const navigate = useNavigate();
 
-    const [matchedData, setmatchedData] = useState({
+    const [formData, setformData] = useState({
         Transactiondate: "",
         monthyear: "",
         transactionType: "",
@@ -122,7 +120,7 @@ const FinanceForm = () => {
 
     }
     const removefile = () => {
-        setImagePreview(matchedData.image = null);
+        setImagePreview(null);
         setValue('image', '')
     }
 
@@ -137,7 +135,7 @@ const FinanceForm = () => {
         const val = { ...data };
 
         const newval = {
-            ...matchedData, Transactiondate: val.Transactiondate,
+            ...formData, Transactiondate: val.Transactiondate,
             transactionType: val.transactionType,
             monthyear: val.monthyear,
             fromAccount: val.fromAccount,
@@ -148,21 +146,15 @@ const FinanceForm = () => {
         }
         if (id) {
             const existingData = dispatch(editTransaction({ id: newval.id, val }));
-            
-            // existingData[id - 1] = newval;
-            // const existingData = {...val};
-            // dispatch(editTransaction({ id: newval.id, existingData }))
-            // existingData[id - 1] = newval;
-            //dispatch(editTransaction(existingData))
-            setmatchedData(existingData)
-            console.log("sandhyaa", existingData)
+            setformData(existingData)
+            //console.log("sandhyaa", existingData)
             alert("Records updated successfully!!!");
             navigate("/viewdata");
         }
         else {
             newval.id = generateId();
             const existingData = dispatch(addTransaction(newval));
-            setmatchedData(existingData);
+            setformData(existingData);
             alert("Records inserted successfully!!!");
             navigate("/viewdata");
         }
@@ -171,12 +163,12 @@ const FinanceForm = () => {
     useEffect(() => {
         if (!id) return
         let matched = transactionredux.find(obj => obj.id == id);
-        setmatchedData(matched);
-        Object.entries(matchedData).forEach(([key, value]) => {
+        setformData(matched);
+        Object.entries(formData).forEach(([key, value]) => {
             setValue(key, value)
         });
-        setImagePreview(matchedData.image);
-    }, [matchedData, setValue]);
+        setImagePreview(formData.image);
+    }, [formData, setValue]);
 
     return (
         <div>
@@ -199,7 +191,7 @@ const FinanceForm = () => {
                                 {...register("Transactiondate")}
 
                             />
-                            <p>{errors.Transactiondate?.message}</p>
+                            <p style={{ color: 'red' }}>{errors.Transactiondate?.message}</p>
                         </div>
                     </div>
                     <div className="form-group row">
@@ -221,7 +213,7 @@ const FinanceForm = () => {
                                     </option>
                                 ))}
                             </select>
-                            <p>{errors.monthyear?.message}</p>
+                            <p style={{ color: 'red' }}>{errors.monthyear?.message}</p>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -242,7 +234,7 @@ const FinanceForm = () => {
                                     </option>
                                 ))}
                             </select>
-                            <p>{errors.transactionType?.message}</p>
+                            <p style={{ color: 'red' }}>{errors.transactionType?.message}</p>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -263,7 +255,7 @@ const FinanceForm = () => {
                                     </option>
                                 ))}
                             </select>
-                            <p>{errors.fromAccount?.message}</p>
+                            <p style={{ color: 'red' }}>{errors.fromAccount?.message}</p>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -284,7 +276,7 @@ const FinanceForm = () => {
                                     </option>
                                 ))}
                             </select>
-                            <p>{errors.toAccount?.message}</p>
+                            <p style={{ color: 'red' }}>{errors.toAccount?.message}</p>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -299,7 +291,7 @@ const FinanceForm = () => {
                                 name="amount"
                                 {...register("amount")}
                             />
-                            <p>{errors.amount?.message}</p>
+                            <p style={{ color: 'red' }}>{errors.amount?.message}</p>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -309,8 +301,8 @@ const FinanceForm = () => {
                         <div class="col-sm-10">
                             <input type="file" class="form-control" name="image" {...register("image")} onChange={handleImageChange} />
                             {imagePreview && <div onClick={removefile}>remove</div>}
-                            {imagePreview && <img src={imagePreview} width="200px" />}
-                            {errors.image && <p>{errors.image.message}</p>}
+                            {imagePreview && <img src={imagePreview} width="100px" />}
+                            {errors.image && <p style={{ color: 'red' }}>{errors.image.message}</p>}
                         </div>
                     </div>
                     <div class="form-group row">
@@ -324,7 +316,7 @@ const FinanceForm = () => {
                                 name="notes"
                                 {...register("notes")}
                             />
-                            <p>{errors.notes?.message}</p>
+                            <p style={{ color: 'red' }}>{errors.notes?.message}</p>
                         </div>
                     </div>
                     <div class="form-group row">

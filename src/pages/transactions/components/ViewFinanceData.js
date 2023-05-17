@@ -12,20 +12,15 @@ const ViewFinanceData = () => {
 
    const transactionvalue = useSelector((state) => state.transaction.value);
 
-   const cookie=new Cookies();
-
-   //const usersredux = useSelector((state) => state.users.value);
-   //console.log("usersreduxx",usersredux);
-
-   //const transactionvalue = useSelector((state) => state.transaction.value);
-   //const [cookies, setCookie,removeCookie] = useCookies(['user']);
+   
 
    console.log("dddddd",transactionvalue);
 
     const dispatch = useDispatch();
 
     const navigate = useNavigate();
-
+    
+    const cookie=new Cookies();
     const handleLogout = () => {
        // Cookies.remove("auth-token");
        cookie.remove("auth-token");
@@ -63,12 +58,6 @@ const ViewFinanceData = () => {
         }
         dispatch(deleteTransaction(id));
         setMaindata(transactionvalue);
-        //setTransactionValue(updatedData);
-        //dispatch(deleteTransaction(id));
-        //setMaindata(updatedData)
-        //dispatch(addTransaction(updatedData))
-       // setMaindata(transactionvalue);
-       //setMaindata(updatedData);
         
     };
 
@@ -76,7 +65,7 @@ const ViewFinanceData = () => {
 
     useEffect(() => {
         setMaindata(transactionvalue)
-    }, [])
+    }, [transactionvalue])
 
 
     const [grouped, setGrouped] = useState({});

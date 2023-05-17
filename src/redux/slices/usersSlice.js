@@ -8,7 +8,7 @@ import { DefaultUsers } from '../../utils/constants';
   reducers:{
     addUsers:(state,action)=>{
       const setusers=[...state.value,action.payload];
-      state.value=setusers;
+        state.value=setusers;
       
     },
 

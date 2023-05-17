@@ -10,14 +10,17 @@ import reportWebVitals from './reportWebVitals';
 import { store } from './redux/store';
 import { Provider } from 'react-redux';
 import { CookiesProvider } from "react-cookie";
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+     <ErrorBoundary>
      <CookiesProvider>
           <Provider store={store}>
                <App />
           </Provider>
      </CookiesProvider>
+     </ErrorBoundary>
            
 
 );

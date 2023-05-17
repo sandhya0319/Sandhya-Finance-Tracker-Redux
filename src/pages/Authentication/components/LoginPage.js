@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import {yupResolver} from '@hookform/resolvers/yup'
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { Routes, Route, Link } from 'react-router-dom'
+import {  Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { Cookies, useCookies } from 'react-cookie';
 import { useSelector, useDispatch } from 'react-redux';
 import { addUsers } from '../../../redux/slices/usersSlice';
+
 
 
 const schema=yup.object().shape({
@@ -16,21 +17,15 @@ const schema=yup.object().shape({
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  // const [inputValues, setInput] = useState({
-  //   email: "",
-  //   password: "",
-  // })
+ 
   const usersredux = useSelector((state) => state.users.value);
 
   console.log("users", usersredux);
   
   const dispatch = useDispatch();
 
-  const [cookies, setCookie,removeCookie] = useCookies(['user']);
+  const [cookies, setCookie] = useCookies(['user']);
 
-  
-
- 
  
   const {register,handleSubmit,formState:{errors}} = useForm({
     resolver:yupResolver(schema)
@@ -41,13 +36,11 @@ const LoginPage = () => {
     const token = Math.floor(1000000000000000 + Math.random() * 9000000000000000).toString(36).substr(0, 10);
 
     const loginValues=usersredux;
-    
 
       let user = loginValues.find(elem => elem.email == data.email && elem.password == data.password);
       if (user) {
         setCookie('auth-token',token, 
-        // {maxAge: 60},
-        // {secure: false},
+        {maxAge: 3600},
         { path: '/' });
         //localStorage.setItem("loggedintoken",  JSON.stringify(token));
         alert(`Welcome ${user.username}!`);

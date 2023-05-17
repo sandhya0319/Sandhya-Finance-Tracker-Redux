@@ -2,12 +2,10 @@ import React, { useState } from 'react'
 import {yupResolver} from '@hookform/resolvers/yup'
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { Routes, Route, Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
 import { addUsers } from '../../../redux/slices/usersSlice';
-
-
+import { Link } from 'react-router-dom';
 
 
 const schema=yup.object().shape({
@@ -17,7 +15,6 @@ const schema=yup.object().shape({
 });
 
 const RegisterPage = () => {
-
   const usersredux = useSelector((state) => state.users.value);
 
   //console.log("users", usersredux);
@@ -25,7 +22,6 @@ const RegisterPage = () => {
   const dispatch = useDispatch();
 
   const [totalusers, setTotalUsers] = useState({
-    username:"",
     email:"",
     password:""
 })
@@ -40,9 +36,11 @@ const RegisterPage = () => {
 
   const onSubmit = (data) => {
     //console.log(data);
-     
       const usersdata={...data};
-
+      // if(!usersdata.email)
+      // {
+      //   alert("Email already exists");
+      // }
       const existsusers = dispatch(addUsers(usersdata));
       //console.log("exixtsusersss",existsusers);
       setTotalUsers(existsusers);
